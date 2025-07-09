@@ -17,7 +17,7 @@ export const getPosts = asyncHandler(async (req, res) => {
     order = 'desc',
     tag,
   } = req.query;
-  const query = tag ? { tags: tag } : {};
+  const query = tag ? { tags: { $regex: tag, $options: 'i' } } : {};
   const options = {
     page: parseInt(page, 10),
     limit: parseInt(limit, 10),
