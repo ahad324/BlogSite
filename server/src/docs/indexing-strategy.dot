@@ -1,0 +1,55 @@
+digraph BlogSite_Indexing_Strategy {
+  rankdir=TB;
+  graph [bgcolor="#F5F7FA", splines=spline, pad=0.5, nodesep=0.6, ranksep=1.0];
+  node [shape=box, style="filled,rounded", fillcolor="#90EE90", color="#228B22", penwidth=2, fontname="Arial", fontsize=12, margin=0.2];
+  edge [color="#2F4F4F", fontname="Arial", fontsize=11, arrowsize=0.8, penwidth=1.5, splines=spline];
+
+  // Title
+  labelloc="t";
+  label="BlogSite Indexing Strategy";
+  fontsize=16;
+  fontname="Arial";
+  fontcolor="#2F4F4F";
+
+  // Entities and Indexes
+  User [label="User\nusername: unique\n  - User Lookup (High)\n  - Ex: User.findOne({ username: 'user' })\nemail: unique\n  - User Lookup (High)\n  - Ex: User.findOne({ email: 'user@example.com' })", fillcolor="#98FB98"];
+  Post [label="Post\nauthor: index\n  - Author Queries (Medium)\n  - Ex: Post.find({ author: <id> })\ncreatedAt: index\n  - Sorting (High)\n  - Ex: Post.find().sort({ createdAt: -1 })\ntags: index\n  - Tag Filtering (Medium)\n  - Ex: Post.find({ tags: 'tech' })\ntitle: text\n  - Keyword Search (Medium)\n  - Ex: Post.find({ $text: { $search: 'title' } })\ncontent: text\n  - Keyword Search (Medium)\n  - Ex: Post.find({ $text: { $search: 'content' } })\ntags,author: compound\n  - Combined Filter (Medium)\n  - Ex: Post.find({ tags: 'tech', author: <id> })", fillcolor="#90EE90"];
+  Comment [label="Comment\npost: index\n  - Post Comments (High)\n  - Ex: Comment.find({ post: <id> })\ncreatedAt: index\n  - Sorting (Medium)\n  - Ex: Comment.find().sort({ createdAt: -1 })\nauthor: index\n  - Author Queries (Low)\n  - Ex: Comment.find({ author: <id> })", fillcolor="#98FB98"];
+
+  // Query Purposes
+  User_Lookup [shape=plaintext, fontname="Arial", fontsize=11, label="User Lookup"];
+  Author_Queries [shape=plaintext, fontname="Arial", fontsize=11, label="Author Queries"];
+  Sorting [shape=plaintext, fontname="Arial", fontsize=11, label="Sorting"];
+  Tag_Filtering [shape=plaintext, fontname="Arial", fontsize=11, label="Tag Filtering"];
+  Keyword_Search [shape=plaintext, fontname="Arial", fontsize=11, label="Keyword Search"];
+  Combined_Filter [shape=plaintext, fontname="Arial", fontsize=11, label="Combined Tag-Author Filter"];
+  Post_Comments [shape=plaintext, fontname="Arial", fontsize=11, label="Post Comments"];
+
+  // Relationships
+  User -> User_Lookup [label="username, email", style=solid, color="#4682B4", penwidth=2.5, arrowhead=vee];
+  Post -> Author_Queries [label="author", style=solid, color="#2F4F4F", arrowhead=vee];
+  Post -> Sorting [label="createdAt", style=solid, color="#4682B4", penwidth=2.5, arrowhead=vee];
+  Post -> Tag_Filtering [label="tags", style=solid, color="#2F4F4F", arrowhead=vee];
+  Post -> Keyword_Search [label="title, content", style=solid, color="#2F4F4F", arrowhead=vee];
+  Post -> Combined_Filter [label="tags,author", style=solid, color="#2F4F4F", arrowhead=vee];
+  Comment -> Post_Comments [label="post", style=solid, color="#4682B4", penwidth=2.5, arrowhead=vee];
+  Comment -> Sorting [label="createdAt", style=solid, color="#2F4F4F", arrowhead=vee];
+  Comment -> Author_Queries [label="author", style=solid, color="#2F4F4F", arrowhead=vee];
+
+  // Legend
+  subgraph cluster_legend {
+    label="Legend";
+    fontsize=12;
+    fontname="Arial";
+    style="dashed,rounded";
+    color="#708090";
+    fillcolor="#F0F8FF";
+    Legend [shape=plaintext, label="Solid Line: Index to Query Purpose\nBlue/Thick Line: High Priority Queries\nUnique: Ensures uniqueness\nText: Enables keyword search\nCompound: Optimizes multi-field queries"];
+  }
+
+  // Footer Note
+  subgraph cluster_footer {
+    style=invis;
+    Footer [shape=plaintext, label="Generated for BlogSite Backend, Task 3, July 2025", fontsize=10, fontcolor="#708090"];
+  }
+}

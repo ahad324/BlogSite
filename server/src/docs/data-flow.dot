@@ -1,0 +1,50 @@
+digraph BlogSite_DataFlow {
+  rankdir=LR;
+  graph [bgcolor="#F5F7FA", splines=spline, pad=0.5, nodesep=1.0, ranksep=1.5];
+  node [shape=box, style="filled,rounded", fillcolor="#FFFFE0", color="#DAA520", penwidth=2, fontname="Arial", fontsize=12, margin=0.2];
+  edge [color="#2F4F4F", fontname="Arial", fontsize=11, arrowsize=0.8, penwidth=1.5, splines=spline];
+
+  // Title
+  labelloc="t";
+  label="BlogSite API Data Flow";
+  fontsize=16;
+  fontname="Arial";
+  fontcolor="#2F4F4F";
+
+  // Components
+  Frontend [label="Frontend\nSends HTTP Requests\nReceives JSON Responses", fillcolor="#FFFACD"];
+  Middleware [label="Middleware\n- Validation (Joi)\n- Authentication (JWT)", fillcolor="#FFFFE0"];
+  API_Routes [label="API Routes\nHandles /api/users\n/api/posts, /api/comments", fillcolor="#FFFACD"];
+  Controllers [label="Controllers\nProcesses Logic\n- createPost\n- getComments\n- registerUser", fillcolor="#FFFFE0"];
+  Models [label="Mongoose Models\nUser, Post, Comment\nHandles DB Operations", fillcolor="#FFFACD"];
+  MongoDB [label="MongoDB\nStores & Retrieves Data\nUses Indexes", fillcolor="#FFFFE0"];
+
+  // Data Flow
+  Frontend -> Middleware [label="HTTP Request\n(e.g., POST /api/posts)", style=solid, color="#2F4F4F", arrowhead=vee];
+  Middleware -> API_Routes [label="Validated Request", style=solid, color="#4682B4", penwidth=2.5, arrowhead=vee];
+  API_Routes -> Controllers [label="Route Mapping\n(e.g., /api/posts → createPost)", style=solid, color="#2F4F4F", arrowhead=vee];
+  Controllers -> Models [label="Business Logic\n- Validation/Sanitization\n- Pagination/Filtering\n- Update Related Docs", style=solid, color="#4682B4", penwidth=2.5, arrowhead=vee];
+  Models -> MongoDB [label="MongoDB Query\n(e.g., save, find, populate)", style=solid, color="#2F4F4F", arrowhead=vee];
+  MongoDB -> Models [label="Query Result", style=solid, color="#2F4F4F", arrowhead=vee];
+  Models -> Controllers [label="Processed Data", style=solid, color="#2F4F4F", arrowhead=vee];
+  Controllers -> API_Routes [label="Response Data", style=solid, color="#2F4F4F", arrowhead=vee];
+  API_Routes -> Middleware [label="JSON Response", style=solid, color="#2F4F4F", arrowhead=vee];
+  Middleware -> Frontend [label="HTTP Response\n+ JWT Cookie (auth)", style=solid, color="#4682B4", penwidth=2.5, arrowhead=vee];
+
+  // Legend
+  subgraph cluster_legend {
+    label="Legend";
+    fontsize=12;
+    fontname="Arial";
+    style="dashed,rounded";
+    color="#708090";
+    fillcolor="#F0F8FF";
+    Legend [shape=plaintext, label="Solid Line: Data Flow\nBlue/Thick Line: Critical Flow\nMiddleware: Validation & Auth\nJWT Cookie: Auth Token"];
+  }
+
+  // Footer Note
+  subgraph cluster_footer {
+    style=invis;
+    Footer [shape=plaintext, label="Generated for BlogSite Backend, Task 3, July 2025", fontsize=10, fontcolor="#708090"];
+  }
+}

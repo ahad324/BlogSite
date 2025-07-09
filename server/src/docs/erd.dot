@@ -1,0 +1,41 @@
+digraph BlogSite_ERD {
+  rankdir=LR;
+  graph [bgcolor="#F5F7FA", splines=spline, pad=0.5, nodesep=0.8, ranksep=1.2];
+  node [shape=box, style="filled,rounded", fillcolor="#ADD8E6", color="#4682B4", penwidth=2, fontname="Arial", fontsize=12, margin=0.2];
+  edge [color="#2F4F4F", fontname="Arial", fontsize=11, arrowsize=0.8, penwidth=1.5, splines=spline];
+
+  // Title
+  labelloc="t";
+  label="BlogSite Entity-Relationship Diagram";
+  fontsize=16;
+  fontname="Arial";
+  fontcolor="#2F4F4F";
+
+  // Entities
+  User [label="User\n_id: ObjectId (PK, bold)\nusername: String (unique, req)\nemail: String (unique, req)\npassword: String (req)\ncreatedAt: Date\nupdatedAt: Date\nposts: Virtual (ref: Post, dashed)", fillcolor="#B3E5FC"];
+  Post [label="Post\n_id: ObjectId (PK, bold)\ntitle: String (req)\ncontent: String (req)\nauthor: ObjectId (ref: User, req)\ntags: [String]\ncomments: [ObjectId (ref: Comment)]\ncreatedAt: Date\nupdatedAt: Date", fillcolor="#ADD8E6"];
+  Comment [label="Comment\n_id: ObjectId (PK, bold)\ncontent: String (req)\nauthor: ObjectId (ref: User, req)\npost: ObjectId (ref: Post, req)\ncreatedAt: Date\nupdatedAt: Date", fillcolor="#B3E5FC"];
+
+  // Relationships
+  User -> Post [label="1:N (author)", style=solid, color="#4682B4", arrowhead=vee];
+  Post -> Comment [label="1:N (comments)", style=solid, color="#4682B4", arrowhead=vee];
+  User -> Comment [label="1:N (author)", style=solid, color="#4682B4", arrowhead=vee];
+  Post -> Tags [label="N:N (tags)", style=dotted, color="#2F4F4F", arrowhead=vee];
+
+  // Legend
+  subgraph cluster_legend {
+    label="Legend";
+    fontsize=12;
+    fontname="Arial";
+    style="dashed,rounded";
+    color="#708090";
+    fillcolor="#F0F8FF";
+    Legend [shape=plaintext, label="Solid Line: One-to-Many\nDotted Line: Many-to-Many\nBold: Primary Key\nDashed: Virtual Field"];
+  }
+
+  // Footer Note
+  subgraph cluster_footer {
+    style=invis;
+    Footer [shape=plaintext, label="Generated for BlogSite Backend, Task 3, July 2025", fontsize=10, fontcolor="#708090"];
+  }
+}
