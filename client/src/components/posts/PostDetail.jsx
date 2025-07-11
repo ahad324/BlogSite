@@ -36,7 +36,7 @@ function PostDetail() {
     };
     fetchPost();
     fetchComments();
-  }, [id]);
+  }, [id,fetchComments]);
 
   const handleUpdate = async (data) => {
     try {

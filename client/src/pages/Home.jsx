@@ -1,9 +1,10 @@
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { usePosts } from '../hooks/usePosts';
 import PostCard from '../components/posts/PostCard.jsx';
 import PostForm from '../components/posts/PostForm.jsx';
 import LoadingSpinner from '../components/common/LoadingSpinner.jsx';
 import Pagination from '../components/common/Pagination.jsx';
+import { debounce } from '../utils/debounce'; // ⬅️ imported from external file
 
 function Home() {
   const { posts, loading, error, pagination, fetchPosts, addPost } = usePosts();
@@ -15,20 +16,12 @@ function Home() {
   const [debouncedTag, setDebouncedTag] = useState('');
   const lastFetchParams = useRef(null);
 
-  const debounce = (func, delay) => {
-    let timeoutId;
-    return (...args) => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => func(...args), delay);
-    };
-  };
-
-  const debouncedFetchPosts = useCallback(
+  // Use useRef to keep a stable debounced function
+  const debouncedFetchPosts = useRef(
     debounce((tag) => {
       setDebouncedTag(tag);
-    }, 500),
-    []
-  );
+    }, 500)
+  ).current;
 
   useEffect(() => {
     const params = {
@@ -39,7 +32,6 @@ function Home() {
       limit: 10,
     };
 
-    // Compare with last fetched parameters to avoid redundant calls
     if (
       lastFetchParams.current &&
       JSON.stringify(params) === JSON.stringify(lastFetchParams.current)

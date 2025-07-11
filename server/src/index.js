@@ -8,7 +8,7 @@ import connectDB from './config/db.js';
 import router from './routes/index.js';
 import errorMiddleware from './middlewares/error.middleware.js';
 
-configDotenv()
+configDotenv();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
