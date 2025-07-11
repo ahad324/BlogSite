@@ -21,7 +21,7 @@ export const getComments = asyncHandler(async (req, res) => {
     page: parseInt(page, 10),
     limit: parseInt(limit, 10),
     sort: { [sort]: order === 'desc' ? -1 : 1 },
-    populate: { path: 'author', select: 'username email' },
+    populate: { path: 'author', select: 'username email profilePicture' },
   };
   const comments = await Comment.paginate({ post: req.params.postId }, options);
   res.json(comments);

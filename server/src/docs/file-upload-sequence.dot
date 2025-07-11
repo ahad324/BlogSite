@@ -1,0 +1,60 @@
+digraph File_Upload_Sequence {
+  rankdir=LR;
+  graph [bgcolor="#F5F7FA", splines=spline, pad=0.5, nodesep=1.0, ranksep=1.5];
+  node [shape=box, style="filled,rounded", fillcolor="#FFFFE0", color="#DAA520", penwidth=2, fontname="Arial", fontsize=12, margin=0.2];
+  edge [color="#2F4F4F", fontname="Arial", fontsize=11, arrowsize=0.8, penwidth=1.5, splines=spline];
+
+  // Title
+  labelloc="t";
+  label="BlogSite Profile Picture Upload Sequence";
+  fontsize=16;
+  fontname="Arial";
+  fontcolor="#2F4F4F";
+
+  // Actors and Components
+  User [label="User", shape=actor, fillcolor="#FFD700"];
+  Frontend [label="Frontend\n(UpdateProfile.jsx)", fillcolor="#FFFACD"];
+  API [label="Backend\n(/api/users/profile)", fillcolor="#FFFFE0"];
+  Multer [label="Multer\n(File Validation)", fillcolor="#FFFACD"];
+  Sharp [label="Sharp\n(Image Processing)", fillcolor="#FFFFE0"];
+  Cloudinary [label="Cloudinary\n(Image Storage)", fillcolor="#FFFACD"];
+  MongoDB [label="MongoDB\n(User Document)", fillcolor="#FFFFE0"];
+
+  // Sequence
+  User -> Frontend [label="Selects Image", style=solid, color="#2F4F4F", arrowhead=vee];
+  Frontend -> User [label="Shows Preview", style=solid, color="#2F4F4F", arrowhead=vee];
+  User -> Frontend [label="Submits Form", style=solid, color="#2F4F4F", arrowhead=vee];
+  Frontend -> API [label="PUT /api/users/profile\n(FormData)", style=solid, color="#4682B4", penwidth=2.5, arrowhead=vee];
+  API -> Multer [label="Validate File\n(Size < 2MB, Type: JPG/PNG/WEBP)", style=solid, color="#2F4F4F", arrowhead=vee];
+  Multer -> API [label="Validated File Buffer", style=solid, color="#2F4F4F", arrowhead=vee];
+  API -> Sharp [label="Process Image\n(Resize to 256x256)", style=solid, color="#2F4F4F", arrowhead=vee];
+  Sharp -> API [label="Processed Buffer", style=solid, color="#2F4F4F", arrowhead=vee];
+  API -> Cloudinary [label="Upload Image\n(blogsite/profiles)", style=solid, color="#4682B4", penwidth=2.5, arrowhead=vee];
+  Cloudinary -> API [label="secure_url, public_id", style=solid, color="#2F4F4F", arrowhead=vee];
+  API -> MongoDB [label="Update User\n(profilePicture, publicId)", style=solid, color="#2F4F4F", arrowhead=vee];
+  MongoDB -> API [label="Updated User", style=solid, color="#2F4F4F", arrowhead=vee];
+  API -> Frontend [label="HTTP 200\nUpdated User Data", style=solid, color="#4682B4", penwidth=2.5, arrowhead=vee];
+  Frontend -> User [label="Show Updated Profile Picture", style=solid, color="#2F4F4F", arrowhead=vee];
+
+  // Error Handling
+  Multer -> Frontend [label="HTTP 400\nInvalid File Type/Size", style=dashed, color="#FF4500", arrowhead=vee];
+  Cloudinary -> API [label="Upload Error", style=dashed, color="#FF4500", arrowhead=vee];
+  API -> Frontend [label="HTTP 400\nCloudinary/DB Error", style=dashed, color="#FF4500", arrowhead=vee];
+
+  // Legend
+  subgraph cluster_legend {
+    label="Legend";
+    fontsize=12;
+    fontname="Arial";
+    style="dashed,rounded";
+    color="#708090";
+    fillcolor="#F0F8FF";
+    Legend [shape=plaintext, label="Solid Line: Normal Flow\nDashed Line: Error Flow\nBlue/Thick Line: Critical Flow"];
+  }
+
+  // Footer Note
+  subgraph cluster_footer {
+    style=invis;
+    Footer [shape=plaintext, label="Generated for BlogSite Backend, Task 4, July 2025", fontsize=10, fontcolor="#708090"];
+  }
+}

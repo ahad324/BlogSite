@@ -6,7 +6,7 @@ import Post from './pages/Post.jsx';
 import UserProfile from './pages/UserProfile.jsx';
 import Login from './components/auth/Login.jsx';
 import Register from './components/auth/Register.jsx';
-import UpdateProfile from './components/auth/UpdateProfile.jsx';
+import Settings from './components/auth/Settings.jsx';
 
 function App() {
   return (
@@ -19,7 +19,7 @@ function App() {
           <Route path="/users/:id" element={<UserProfile />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/profile/update" element={<UpdateProfile />} />
+          <Route path="/settings" element={<Settings />} />
         </Routes>
       </main>
       <Footer />

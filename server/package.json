@@ -21,6 +21,7 @@
   "description": "Blog system backend API",
   "dependencies": {
     "bcryptjs": "^3.0.2",
+    "cloudinary": "^2.5.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.1.0",
@@ -30,7 +31,9 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.16.2",
     "mongoose-paginate-v2": "^1.8.5",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "multer": "^2.0.1",
+    "sharp": "^0.33.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.30.1",

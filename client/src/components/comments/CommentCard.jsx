@@ -30,6 +30,16 @@ function CommentCard({ comment, onCommentUpdated, onCommentDeleted }) {
 
   return (
     <div className="bg-gray-800 border border-gray-700 rounded-xl shadow-lg p-6 mb-4">
+      <div className="flex items-center mb-3">
+        <img
+          src={
+            comment.author.profilePicture || 'https://via.placeholder.com/40'
+          }
+          alt={`${comment.author.username}'s profile`}
+          className="w-10 h-10 rounded-full object-cover mr-3"
+        />
+        <span className="text-gray-400">{comment.author.username}</span>
+      </div>
       {editing ? (
         <div className="space-y-4">
           <textarea
@@ -66,7 +76,6 @@ function CommentCard({ comment, onCommentUpdated, onCommentDeleted }) {
             {comment.content}
           </p>
           <div className="flex justify-between text-sm text-gray-400">
-            <span>By {comment.author.username}</span>
             <span>{formatDate(comment.createdAt)}</span>
           </div>
           {user && user.id === comment.author._id && (

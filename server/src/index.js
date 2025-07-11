@@ -1,14 +1,14 @@
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import dotenv from 'dotenv';
+import {configDotenv} from 'dotenv';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import connectDB from './config/db.js';
 import router from './routes/index.js';
 import errorMiddleware from './middlewares/error.middleware.js';
 
-dotenv.config();
+configDotenv()
 
 const app = express();
 const PORT = process.env.PORT || 3000;

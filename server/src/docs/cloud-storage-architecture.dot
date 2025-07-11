@@ -1,0 +1,49 @@
+digraph Cloud_Storage_Architecture {
+  rankdir=TB;
+  graph [bgcolor="#F5F7FA", splines=spline, pad=0.5, nodesep=0.6, ranksep=1.0];
+  node [shape=box, style="filled,rounded", fillcolor="#FFFFE0", color="#DAA520", penwidth=2, fontname="Arial", fontsize=12, margin=0.2];
+  edge [color="#2F4F4F", fontname="Arial", fontsize=11, arrowsize=0.8, penwidth=1.5, splines=spline];
+
+  // Title
+  labelloc="t";
+  label="BlogSite Cloud Storage Architecture";
+  fontsize=16;
+  fontname="Arial";
+  fontcolor="#2F4F4F";
+
+  // Components
+  User [label="User\nUploads Profile Picture", shape=actor, fillcolor="#FFD700"];
+  Frontend [label="Frontend\n(UpdateProfile.jsx)\nSends FormData", fillcolor="#FFFACD"];
+  Backend [label="Backend\n(user.controller.js)\nProcesses with Multer/Sharp", fillcolor="#FFFFE0"];
+  Cloudinary [label="Cloudinary\nStores Images\nblogsite/profiles", fillcolor="#FFFACD"];
+  MongoDB [label="MongoDB\nStores secure_url\nand public_id", fillcolor="#FFFFE0"];
+  CDN [label="Cloudinary CDN\nDelivers Images", fillcolor="#FFFACD"];
+
+  // Relationships
+  User -> Frontend [label="Selects Image", style=solid, color="#2F4F4F", arrowhead=vee];
+  Frontend -> Backend [label="PUT /api/users/profile\n(FormData)", style=solid, color="#4682B4", penwidth=2.5, arrowhead=vee];
+  Backend -> Cloudinary [label="Upload Image\n(256x256, auto quality)", style=solid, color="#4682B4", penwidth=2.5, arrowhead=vee];
+  Cloudinary -> Backend [label="secure_url, public_id", style=solid, color="#2F4F4F", arrowhead=vee];
+  Backend -> MongoDB [label="Update User\n(profilePicture, publicId)", style=solid, color="#2F4F4F", arrowhead=vee];
+  MongoDB -> Backend [label="Updated User Data", style=solid, color="#2F4F4F", arrowhead=vee];
+  Backend -> Frontend [label="Updated User Data", style=solid, color="#2F4F4F", arrowhead=vee];
+  Cloudinary -> CDN [label="Store Image", style=solid, color="#2F4F4F", arrowhead=vee];
+  CDN -> Frontend [label="Serve Image\n(via secure_url)", style=solid, color="#4682B4", penwidth=2.5, arrowhead=vee];
+
+  // Legend
+  subgraph cluster_legend {
+    label="Legend";
+    fontsize=12;
+    fontname="Arial";
+    style="dashed,rounded";
+    color="#708090";
+    fillcolor="#F0F8FF";
+    Legend [shape=plaintext, label="Solid Line: Data Flow\nBlue/Thick Line: Critical Flow"];
+  }
+
+  // Footer Note
+  subgraph cluster_footer {
+    style=invis;
+    Footer [shape=plaintext, label="Generated for BlogSite Backend, Task 4, July 2025", fontsize=10, fontcolor="#708090"];
+  }
+}

@@ -10,7 +10,7 @@ export const login = async (data) => await api.post('/users/login', data);
 export const logout = async () => await api.post('/users/logout');
 export const getCurrentUser = async () => await api.get('/users/me');
 export const getUser = async (id) => await api.get(`/users/${id}`);
-export const updateUser = async (id, data) => await api.put(`/users/${id}`, data);
+export const updateUser = async (id, data) => await api.put('/users/profile', data);
 export const createPost = async (data) => await api.post('/posts', data);
 export const getPosts = async (params) => await api.get('/posts', { params });
 export const getPost = async (id) => await api.get(`/posts/${id}`);

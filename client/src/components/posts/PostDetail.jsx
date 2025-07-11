@@ -54,7 +54,7 @@ function PostDetail() {
     try {
       await deletePost(id);
       setSuccess('Post deleted successfully');
-      setTimeout(() => navigate('/'), 1500); // Redirect after showing success
+      setTimeout(() => navigate('/'), 1500);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to delete post');
     }
