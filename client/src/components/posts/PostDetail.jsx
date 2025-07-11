@@ -17,6 +17,7 @@ function PostDetail() {
   const [post, setPost] = useState(null);
   const [editing, setEditing] = useState(false);
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
   const {
     comments,
     loading: commentsLoading,
@@ -42,43 +43,59 @@ function PostDetail() {
       await updatePost(id, data);
       setPost({ ...post, ...data });
       setEditing(false);
+      setError(null);
+      setSuccess('Post updated successfully');
     } catch (err) {
-      setError(err.message);
+      setError(err.response?.data?.message || 'Failed to update post');
     }
   };
 
   const handleDelete = async () => {
     try {
       await deletePost(id);
-      navigate('/');
+      setSuccess('Post deleted successfully');
+      setTimeout(() => navigate('/'), 1500); // Redirect after showing success
     } catch (err) {
-      setError(err.message);
+      setError(err.response?.data?.message || 'Failed to delete post');
     }
   };
 
   if (!post && !error) return <LoadingSpinner />;
-  if (error) return <p className="text-error text-center">{error}</p>;
+  if (error)
+    return (
+      <p className="text-red-500 text-center" role="alert">
+        {error}
+      </p>
+    );
 
   return (
-    <div className="max-w-3xl mx-auto mt-12">
+    <div className="max-w-4xl mx-auto mt-12">
+      {success && (
+        <p className="text-green-500 text-center mb-4" role="alert">
+          {success}
+        </p>
+      )}
       {editing ? (
         <PostForm onSubmit={handleUpdate} initialData={post} />
       ) : (
-        <div className="card">
-          <h1 className="text-4xl font-bold text-text-primary mb-4">
+        <div className="bg-gray-800 border border-gray-700 rounded-xl shadow-lg p-8">
+          <h1 className="text-4xl font-bold text-gray-100 mb-6">
             {post.title}
           </h1>
-          <div className="flex justify-between text-sm text-text-muted mb-6">
+          <div className="flex justify-between text-sm text-gray-400 mb-6">
             <span>By {post.author.username}</span>
             <span>{formatDate(post.createdAt)}</span>
           </div>
-          <p className="text-text-secondary leading-relaxed mb-8">
+          <p className="text-gray-300 leading-relaxed mb-8 text-lg">
             {post.content}
           </p>
           {post.tags && post.tags.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-8">
               {post.tags.map((tag, index) => (
-                <span key={index} className="tag">
+                <span
+                  key={index}
+                  className="bg-emerald-500 text-white text-sm font-medium px-3 py-1.5 rounded-full hover:bg-emerald-600 transition-colors duration-300"
+                >
                   {tag}
                 </span>
               ))}
@@ -88,23 +105,26 @@ function PostDetail() {
             <div className="flex space-x-4 mb-8">
               <button
                 onClick={() => setEditing(true)}
-                className="btn-secondary"
+                className="bg-gray-700 text-gray-200 font-semibold py-3 px-6 rounded-lg hover:bg-gray-600 transition-colors duration-300"
+                aria-label="Edit post"
               >
                 Edit Post
               </button>
-              <button onClick={handleDelete} className="btn-secondary">
+              <button
+                onClick={handleDelete}
+                className="bg-red-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-red-700 transition-colors duration-300"
+                aria-label="Delete post"
+              >
                 Delete Post
               </button>
             </div>
           )}
-          <h2 className="text-2xl font-bold text-text-primary mb-6">
-            Comments
-          </h2>
+          <h2 className="text-2xl font-bold text-gray-100 mb-6">Comments</h2>
           <CommentForm postId={id} onCommentAdded={fetchComments} />
           {commentsLoading ? (
             <LoadingSpinner />
           ) : comments.length === 0 ? (
-            <p className="text-text-muted">No comments yet.</p>
+            <p className="text-gray-400 text-center">No comments yet.</p>
           ) : (
             <>
               {comments.map((comment) => (

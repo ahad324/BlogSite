@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { usePosts } from '../hooks/usePosts';
 import PostCard from '../components/posts/PostCard.jsx';
 import PostForm from '../components/posts/PostForm.jsx';
@@ -7,37 +7,102 @@ import Pagination from '../components/common/Pagination.jsx';
 
 function Home() {
   const { posts, loading, error, pagination, fetchPosts, addPost } = usePosts();
-  const [tagFilter, setTagFilter] = useState('');
+  const [filters, setFilters] = useState({
+    tag: '',
+    sort: 'createdAt',
+    order: 'desc',
+  });
+  const [debouncedTag, setDebouncedTag] = useState('');
+  const lastFetchParams = useRef(null);
+
+  const debounce = (func, delay) => {
+    let timeoutId;
+    return (...args) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func(...args), delay);
+    };
+  };
+
+  const debouncedFetchPosts = useCallback(
+    debounce((tag) => {
+      setDebouncedTag(tag);
+    }, 500),
+    []
+  );
 
   useEffect(() => {
-    fetchPosts(tagFilter ? { tag: tagFilter } : {});
-  }, [tagFilter]);
+    const params = {
+      tag: debouncedTag,
+      sort: filters.sort,
+      order: filters.order,
+      page: 1,
+      limit: 10,
+    };
+
+    // Compare with last fetched parameters to avoid redundant calls
+    if (
+      lastFetchParams.current &&
+      JSON.stringify(params) === JSON.stringify(lastFetchParams.current)
+    ) {
+      return;
+    }
+
+    fetchPosts(params);
+    lastFetchParams.current = params;
+  }, [debouncedTag, filters.sort, filters.order, fetchPosts]);
 
   const handleTagFilter = (e) => {
-    setTagFilter(e.target.value);
+    setFilters((prev) => ({ ...prev, tag: e.target.value }));
+    debouncedFetchPosts(e.target.value);
+  };
+
+  const handleSortChange = (e) => {
+    const [sort, order] = e.target.value.split(':');
+    setFilters((prev) => ({ ...prev, sort, order }));
   };
 
   return (
     <div>
-      <h1 className="text-4xl font-bold text-text-primary mb-12 text-center">
+      <h1 className="text-4xl font-bold text-gray-100 mb-12 text-center">
         BlogSite
       </h1>
       <PostForm onSubmit={addPost} />
-      <div className="my-8 max-w-md mx-auto">
+      <div className="my-8 max-w-lg mx-auto flex flex-col sm:flex-row gap-4">
         <input
           type="text"
           placeholder="Filter by tag..."
-          value={tagFilter}
+          value={filters.tag}
           onChange={handleTagFilter}
-          className="input-field"
+          name="tagFilter"
+          className="flex-1 p-4 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300"
+          aria-label="Filter posts by tag"
         />
+        <div className="flex flex-col">
+          <label htmlFor="sort" className="text-gray-300 mb-2 font-medium">
+            Sort by: {filters.sort === 'createdAt' ? 'Date' : 'Title'}
+          </label>
+          <select
+            id="sort"
+            value={`${filters.sort}:${filters.order}`}
+            onChange={handleSortChange}
+            className="w-full sm:w-48 p-4 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300"
+            aria-label="Sort posts"
+          >
+            <option value="createdAt:desc">Newest First (by Date)</option>
+            <option value="createdAt:asc">Oldest First (by Date)</option>
+            <option value="title:asc">Title A-Z</option>
+            <option value="title:desc">Title Z-A</option>
+          </select>
+        </div>
       </div>
       {loading ? (
         <LoadingSpinner />
       ) : error ? (
-        <p className="text-error text-center">{error}</p>
+        <p className="text-red-500 text-center" role="alert">
+          {error}
+        </p>
       ) : posts.length === 0 ? (
-        <p className="text-text-muted text-center">No posts found.</p>
+        <p className="text-gray-400 text-center">No posts found.</p>
       ) : (
         <>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -48,7 +113,15 @@ function Home() {
           <Pagination
             currentPage={pagination.page}
             totalPages={pagination.totalPages}
-            onPageChange={(page) => fetchPosts({ page, tag: tagFilter })}
+            onPageChange={(page) =>
+              fetchPosts({
+                page,
+                tag: debouncedTag,
+                sort: filters.sort,
+                order: filters.order,
+                limit: 10,
+              })
+            }
           />
         </>
       )}

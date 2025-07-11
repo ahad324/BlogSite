@@ -15,18 +15,18 @@ function Header() {
   };
 
   return (
-    <header className="bg-surface border-b border-border shadow-card sticky top-0 z-50">
-      <nav className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+    <header className="bg-gray-800 border-b border-gray-700 shadow-lg sticky top-0 z-50">
+      <nav className="container mx-auto px-4 sm:px-6 lg:px-8 py-5 flex justify-between items-center">
         <Link
           to="/"
-          className="text-2xl font-bold text-primary hover:text-primary-dark transition-colors"
+          className="text-3xl font-bold text-blue-400 hover:text-blue-300 transition-colors duration-300"
         >
           BlogSite
         </Link>
-        <div className="flex items-center space-x-6">
+        <div className="flex items-center space-x-8">
           <Link
             to="/"
-            className="text-text-secondary hover:text-accent transition-colors"
+            className="text-gray-300 hover:text-blue-400 transition-colors duration-300 text-lg font-medium"
           >
             Home
           </Link>
@@ -34,13 +34,19 @@ function Header() {
             <>
               <Link
                 to={`/users/${user.id}`}
-                className="text-text-secondary hover:text-accent transition-colors"
+                className="text-gray-300 hover:text-blue-400 transition-colors duration-300 text-lg font-medium"
               >
                 Profile
               </Link>
+              <Link
+                to="/profile/update"
+                className="text-gray-300 hover:text-blue-400 transition-colors duration-300 text-lg font-medium"
+              >
+                Update Profile
+              </Link>
               <button
                 onClick={handleLogout}
-                className="text-text-secondary hover:text-accent transition-colors"
+                className="text-gray-300 hover:text-blue-400 transition-colors duration-300 text-lg font-medium"
               >
                 Logout
               </button>
@@ -49,13 +55,13 @@ function Header() {
             <>
               <Link
                 to="/login"
-                className="text-text-secondary hover:text-accent transition-colors"
+                className="text-gray-300 hover:text-blue-400 transition-colors duration-300 text-lg font-medium"
               >
                 Login
               </Link>
               <Link
                 to="/register"
-                className="text-text-secondary hover:text-accent transition-colors"
+                className="text-gray-300 hover:text-blue-400 transition-colors duration-300 text-lg font-medium"
               >
                 Register
               </Link>

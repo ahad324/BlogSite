@@ -29,30 +29,43 @@ function CommentCard({ comment, onCommentUpdated, onCommentDeleted }) {
   };
 
   return (
-    <div className="card mb-4">
+    <div className="bg-gray-800 border border-gray-700 rounded-xl shadow-lg p-6 mb-4">
       {editing ? (
         <div className="space-y-4">
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            className="input-field min-h-[100px]"
+            className="w-full p-4 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300 min-h-[120px]"
+            aria-label="Edit comment"
           />
-          {error && <p className="text-error text-center">{error}</p>}
+          {error && (
+            <p className="text-red-500 text-center" role="alert">
+              {error}
+            </p>
+          )}
           <div className="flex space-x-4">
-            <button onClick={handleUpdate} className="btn-primary">
+            <button
+              onClick={handleUpdate}
+              className="bg-blue-500 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-600 transition-colors duration-300"
+              aria-label="Save comment"
+            >
               Save
             </button>
-            <button onClick={() => setEditing(false)} className="btn-secondary">
+            <button
+              onClick={() => setEditing(false)}
+              className="bg-gray-700 text-gray-200 font-semibold py-3 px-6 rounded-lg hover:bg-gray-600 transition-colors duration-300"
+              aria-label="Cancel editing"
+            >
               Cancel
             </button>
           </div>
         </div>
       ) : (
         <>
-          <p className="text-text-secondary leading-relaxed mb-3">
+          <p className="text-gray-300 leading-relaxed mb-3 text-lg">
             {comment.content}
           </p>
-          <div className="flex justify-between text-sm text-text-muted">
+          <div className="flex justify-between text-sm text-gray-400">
             <span>By {comment.author.username}</span>
             <span>{formatDate(comment.createdAt)}</span>
           </div>
@@ -60,11 +73,16 @@ function CommentCard({ comment, onCommentUpdated, onCommentDeleted }) {
             <div className="flex space-x-4 mt-4">
               <button
                 onClick={() => setEditing(true)}
-                className="btn-secondary"
+                className="bg-gray-700 text-gray-200 font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition-colors duration-300"
+                aria-label="Edit comment"
               >
                 Edit
               </button>
-              <button onClick={handleDelete} className="btn-secondary">
+              <button
+                onClick={handleDelete}
+                className="bg-red-600 text-gray-200 font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition-colors duration-300"
+                aria-label="Delete comment"
+              >
                 Delete
               </button>
             </div>

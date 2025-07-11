@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { register } from '../../utils/api';
+import { Link } from 'react-router-dom';
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -26,16 +27,20 @@ function Register() {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-12 p-6 card">
-      <h2 className="text-3xl font-bold text-text-primary mb-6 text-center">
-        Register
+    <div className="max-w-md mx-auto mt-16 p-8 bg-gray-800 border border-gray-700 rounded-xl shadow-lg">
+      <h2 className="text-3xl font-bold text-gray-100 mb-8 text-center">
+        Sign Up
       </h2>
-      {error && <p className="text-error mb-4 text-center">{error}</p>}
+      {error && (
+        <p className="text-red-500 mb-6 text-center" role="alert">
+          {error}
+        </p>
+      )}
       <div className="space-y-6">
         <div>
           <label
             htmlFor="username"
-            className="block mb-2 text-text-secondary font-medium"
+            className="block mb-2 text-gray-300 font-medium"
           >
             Username
           </label>
@@ -45,14 +50,15 @@ function Register() {
             name="username"
             value={formData.username}
             onChange={handleChange}
-            className="input-field"
+            className="w-full p-4 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300"
             required
+            aria-describedby="username-error"
           />
         </div>
         <div>
           <label
             htmlFor="email"
-            className="block mb-2 text-text-secondary font-medium"
+            className="block mb-2 text-gray-300 font-medium"
           >
             Email
           </label>
@@ -62,14 +68,15 @@ function Register() {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            className="input-field"
+            className="w-full p-4 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300"
             required
+            aria-describedby="email-error"
           />
         </div>
         <div>
           <label
             htmlFor="password"
-            className="block mb-2 text-text-secondary font-medium"
+            className="block mb-2 text-gray-300 font-medium"
           >
             Password
           </label>
@@ -79,22 +86,26 @@ function Register() {
             name="password"
             value={formData.password}
             onChange={handleChange}
-            className="input-field"
+            className="w-full p-4 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300"
             required
+            aria-describedby="password-error"
           />
         </div>
-        <button onClick={handleSubmit} className="btn-primary w-full">
-          Register
+        <button
+          onClick={handleSubmit}
+          className="w-full bg-blue-500 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-600 focus:ring-2 focus:ring-blue-600 focus:outline-none transition-colors duration-300"
+        >
+          Sign Up
         </button>
       </div>
-      <p className="mt-6 text-center text-text-secondary">
+      <p className="mt-6 text-center text-gray-400">
         Already have an account?{' '}
-        <a
-          href="/login"
-          className="text-primary hover:text-primary-dark transition-colors"
+        <Link
+          to="/login"
+          className="text-blue-400 hover:text-blue-300 transition-colors duration-300"
         >
-          Login
-        </a>
+          Sign In
+        </Link>
       </p>
     </div>
   );

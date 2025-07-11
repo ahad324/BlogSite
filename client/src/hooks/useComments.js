@@ -10,7 +10,7 @@ export const useComments = (postId) => {
   const fetchComments = async (params = {}) => {
     setLoading(true);
     try {
-      const response = await getComments(postId, { page: 1, limit: 10, ...params });
+      const response = await getComments(postId, { page: 1, limit: 10, sort: 'createdAt', order: 'desc', ...params });
       setComments(response.data.docs);
       setPagination({
         page: response.data.page,

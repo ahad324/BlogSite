@@ -22,18 +22,23 @@ function UserProfile() {
   }, [id]);
 
   if (!user && !error) return <LoadingSpinner />;
-  if (error) return <p className="text-error text-center">{error}</p>;
+  if (error)
+    return (
+      <p className="text-red-500 text-center" role="alert">
+        {error}
+      </p>
+    );
 
   return (
     <div className="max-w-3xl mx-auto mt-12">
-      <div className="card">
-        <h1 className="text-3xl font-bold text-text-primary mb-6">
+      <div className="bg-gray-800 border border-gray-700 rounded-xl shadow-lg p-8">
+        <h1 className="text-3xl font-bold text-gray-100 mb-6">
           {user.username}'s Profile
         </h1>
-        <p className="text-text-secondary mb-6">Email: {user.email}</p>
-        <h2 className="text-2xl font-semibold text-text-primary mb-4">Posts</h2>
+        <p className="text-gray-300 mb-6">Email: {user.email}</p>
+        <h2 className="text-2xl font-semibold text-gray-100 mb-4">Posts</h2>
         {user.posts.length === 0 ? (
-          <p className="text-text-muted">No posts yet.</p>
+          <p className="text-gray-400">No posts yet.</p>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2">
             {user.posts.map((post) => (

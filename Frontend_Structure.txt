@@ -1,0 +1,49 @@
+Directory Structure:
+
+├── .gitignore
+├── .prettierrc
+├── .vscode/
+│   ├── settings.json
+├── README.md
+├── eslint.config.js
+├── index.html
+├── package.json
+├── public/
+├── src/
+│   ├── App.jsx
+│   ├── assets/
+│   ├── components/
+│   │   ├── auth/
+│   │   │   ├── Login.jsx
+│   │   │   ├── Register.jsx
+│   │   │   ├── UpdateProfile.jsx
+│   │   ├── comments/
+│   │   │   ├── CommentCard.jsx
+│   │   │   ├── CommentForm.jsx
+│   │   ├── common/
+│   │   │   ├── Footer.jsx
+│   │   │   ├── Header.jsx
+│   │   │   ├── LoadingSpinner.jsx
+│   │   │   ├── Pagination.jsx
+│   │   ├── posts/
+│   │   │   ├── PostCard.jsx
+│   │   │   ├── PostDetail.jsx
+│   │   │   ├── PostForm.jsx
+│   ├── context/
+│   │   ├── AuthContext.jsx
+│   ├── hooks/
+│   │   ├── useAuth.js
+│   │   ├── useComments.js
+│   │   ├── usePosts.js
+│   ├── main.jsx
+│   ├── pages/
+│   │   ├── Home.jsx
+│   │   ├── Post.jsx
+│   │   ├── UserProfile.jsx
+│   ├── styles/
+│   │   ├── tailwind.css
+│   ├── utils/
+│   │   ├── api.js
+│   │   ├── helpers.js
+├── tailwind.config.js
+├── vite.config.js
