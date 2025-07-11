@@ -10,11 +10,16 @@ function CommentForm({ postId, onCommentAdded }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!content.trim()) {
+      setError('Comment cannot be empty');
+      return;
+    }
     try {
       await createComment({ content, post: postId });
       setContent('');
       setSuccess('Comment added successfully');
-      setTimeout(() => setSuccess(null), 3000); // Clear success message after 3s
+      setTimeout(() => setSuccess(null), 3000);
+      setError(null);
       onCommentAdded();
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to create comment');
